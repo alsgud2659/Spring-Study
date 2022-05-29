@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>예약</title>
+</head>
+<body>
+    <form action="reservation" method="post" id="rform">
+        <p>성명 :</p>
+        <input type="text" name="name" id="rname"> <br>
+        <p>날짜 :</p>
+        <input type="date" name="date" min="2022-05-24" max="2022-07-31" id="rdate"> <br>
+        <p>시간 :</p>
+        <select name="time" id="rtime">
+            <option>점심 1부</option>
+            <option>점심 2부</option>
+            <option>저녁 1부</option>
+            <option>저녁 2부</option>
+        </select>
+        <br>
+        <p>인원수 :</p>
+        <input type="text" name="people" id="rpeople">
+        <br>
+        <button type="submit" onclick="send()">예약</button>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function send() {
+        if(!rform.rname.value){
+            alert("성명을 입력하세요");
+            return;
+        } else if(!rform.rdate.value) {
+            alert("날짜를 입력하세요");
+            return;
+        }else if(!rform.rtime.value) {
+            alert("시간을 입력하세요");
+            return;
+        }else if(!rform.rpeople.value) {
+            alert("인원수를 입력하세요");
+            return;
+        }
+        rform.submit();
+    }
+
+</script>
+
+</html>

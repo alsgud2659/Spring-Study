@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <style>
+        body {transform: scale(0.8); margin-top: -50px;}
+    </style>
+</head>
+<body>
+<!-- Main -->
+<div id="main">
+    <div class="wrapper">
+        <div class="inner">
+
+            <!-- Elements -->
+            <header class="major">
+                <h1>Board</h1>
+                <p>게시글 등록</p>
+            </header>
+            <!-- Table -->
+            <h3><a href="/board/list" class="button small">목록 보기</a></h3>
+            <div class="content">
+                <div class="form">
+                    <form method="post" action="/board/register" id="registerForm">
+                        <div class="fields">
+                            <div class="field">
+                                <h4>제목</h4>
+                                <input name="boardTitle" placeholder="Title" type="text" />
+                            </div>
+                            <div class="field">
+                                <h4>내용</h4>
+                                <textarea name="boardContent" rows="6" placeholder="Content" style="resize:none"></textarea>
+                            </div>
+                            <div class="field">
+                                <h4>작성자</h4>
+                                <input name="boardWriter" placeholder="Writer" type="text" />
+                            </div>
+                        </div>
+                        <ul class="actions special">
+                            <li><input type="submit" class="button" value="등록"/></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- Scripts -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.dropotron.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+</html>

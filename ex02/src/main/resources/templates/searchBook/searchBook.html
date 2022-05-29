@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>도서명</th>
+        <th>대출가능 여부</th>
+    </tr>
+    <tr>
+        <td>인생의12가지법칙</td>
+        <td>가능</td>
+    </tr>
+    <tr>
+        <td>컴퓨터아키텍쳐</td>
+        <td>가능</td>
+    </tr>
+    <tr>
+        <td>쉽게배우는알고리즘</td>
+        <td>불가능</td>
+    </tr>
+    <tr>
+        <td>JAVA의 정석</td>
+        <td>불가능</td>
+    </tr>
+    <tr>
+        <td>VOCA Bible</td>
+        <td>가능</td>
+    </tr>
+</table>
+<br>
+<form action="searchBook" method="post" id="bookForm">
+    <label>
+        도서명 입력<br>
+        <input type="text" name="bookTitle" id="title">
+    </label>
+    <input type="button" onclick="send()" value="완료">
+</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function send() {
+        if(!bookForm.bookTitle.value){
+            alert("도서명을 입력하세요");
+            return;
+        }
+        bookForm.submit();
+    }
+</script>
+</html>
