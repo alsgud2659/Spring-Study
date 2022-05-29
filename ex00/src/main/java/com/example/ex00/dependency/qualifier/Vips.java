@@ -8,11 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 @Qualifier("vips")
-@Primary
-public class Vips implements Restuarant {
-
+public @Primary class Vips implements Restaurant{
     @Override
-    public boolean checkSideBar() {
-        return false;
+    public boolean checkSidebar() {
+        return true;
     }
 }

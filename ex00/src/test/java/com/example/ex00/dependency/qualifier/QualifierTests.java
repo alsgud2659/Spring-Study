@@ -5,24 +5,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 @SpringBootTest
 @Slf4j
-@WebAppConfiguration
 public class QualifierTests {
 
     @Autowired
     private Computer computer;
+
     @Autowired
-    @Qualifier("outback")
-    private Restuarant restuarant;
+    private Restaurant restaurant;
 
     @Test
-    public void QualifierTests() {
-        log.info("---------------");
-        log.info("steak : " + Restuarant.steakPrice);
-        log.info("sidebar : " + restuarant.checkSideBar());
-        log.info("----------------------");
+    public void qualifierTest(){
+        log.info("----------------------------");
+        log.info("computer : " + computer.getScreenWidth());
+        log.info("----------------------------");
+
+        log.info("----------------------------");
+        log.info("steak : " + Restaurant.steak);
+        log.info("sidebar : " + restaurant.checkSidebar());
+        log.info("----------------------------");
     }
 }

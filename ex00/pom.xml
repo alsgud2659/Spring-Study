@@ -12,7 +12,7 @@
     <artifactId>ex00</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ex00</name>
-    <description>First Project</description>
+    <description>first project</description>
     <properties>
         <java.version>11</java.version>
     </properties>
