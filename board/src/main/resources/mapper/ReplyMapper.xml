@@ -63,6 +63,20 @@
     <select id="getTotal" resultType="_int">
         SELECT COUNT(BOARD_BNO) FROM TBL_BOARD
     </select>
+
+    <insert id="insertReply">
+        <selectKey keyProperty="boardBno" resultType="long" order="BEFORE">
+            SELECT SEQ_REPLY.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_REPLY
+        (REPLY_NUMBER, BOARD_BNO ,REPLY_CONTENT, REPLY_WRITER)
+        VALUES(#{replyNumber}, #{boardBno},#{replyContent}, #{replyWriter})
+    </insert>
+
+    <select id="getReply" resultType="replyVO">
+        SELECT REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE
+        FROM TBL_REPLY WHERE REPLY_NUMBER = #{replyNumber}
+    </select>
 </mapper>
 
 

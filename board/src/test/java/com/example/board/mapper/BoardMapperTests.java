@@ -24,17 +24,17 @@ public class BoardMapperTests {
     }
 
 
-//    @Test
-//    public void insertTest(){
-//        BoardVO boardVO = new BoardVO();
-//        boardVO.setBoardTitle("새로운 게시글 제목2");
-//        boardVO.setBoardContent("새로운 게시글 내용2");
-//        boardVO.setBoardWriter("hds1111");
-//
-//        boardMapper.insert(boardVO);
-//
-//        log.info("게시글 번호 : " + boardVO.getBoardBno());
-//    }
+    @Test
+    public void insertTest(){
+        BoardVO boardVO = new BoardVO();
+        boardVO.setBoardTitle("새로운 게시글 제목2");
+        boardVO.setBoardContent("새로운 게시글 내용2");
+        boardVO.setBoardWriter("alsgud2659");
+
+        boardMapper.insert(boardVO);
+
+        log.info("게시글 번호 : " + boardVO.getBoardBno());
+    }
 
 //    @Test
 //    public void getTest(){
