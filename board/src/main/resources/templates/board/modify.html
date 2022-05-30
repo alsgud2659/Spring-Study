@@ -23,10 +23,12 @@
                 <p>게시글 수정</p>
             </header>
             <!-- Table -->
-            <h3><a href="/board/list" class="button small">목록 보기</a></h3>
+            <h3><a id="goList" class="button small">목록 보기</a></h3>
             <div class="content">
                 <div class="form">
                     <form method="post" action="/board/modify" th:object="${board}">
+                        <input type="hidden" th:field="${criteria.pageNum}">
+                        <input type="hidden" th:field="${criteria.amount}">
                         <div class="fields">
                             <div class="field">
                                 <h4>번호</h4>
@@ -64,4 +66,14 @@
 <script src="/assets/js/breakpoints.min.js"></script>
 <script src="/assets/js/util.js"></script>
 <script src="/assets/js/main.js"></script>
+<script th:inline="javascript">
+    let paging = [[${criteria.listLink}]];
+
+    $("a#goList").click(function(e){
+        e.preventDefault();
+        location.href = "/board/list" + paging;
+    });
+
+
+</script>
 </html>

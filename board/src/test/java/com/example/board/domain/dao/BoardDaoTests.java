@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-@Slf4j
+@SpringBootTest // 테스트를 하기 위한 의존성을 주입
+@Slf4j // log를 사용할 수 있게 해줌
 public class BoardDaoTests {
     @Autowired
     private BoardDAO boardDAO;

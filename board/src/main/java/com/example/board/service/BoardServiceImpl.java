@@ -10,6 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+// 보드 서비스를 임블리먼트 받음
+// 서비스를 쓰면 1메소드 1쿼리가 아닌 n쿼리가 가능함
 public class BoardServiceImpl implements BoardService{
     private final BoardDAO boardDAO;
 

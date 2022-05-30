@@ -23,7 +23,7 @@
                 <p>게시글 상세보기</p>
             </header>
             <!-- Table -->
-            <h3><a href="/board/list" class="button small">목록 보기</a></h3>
+            <h3><a id="goList" class="button small">목록 보기</a></h3>
             <div class="content">
                 <div class="form">
                     <form method="post" action="/board/remove" th:object="${board}">
@@ -59,16 +59,36 @@
 </div>
 </body>
 <!-- Scripts -->
-<script src="/js/jquery.min.js"></script>
-<script src="/js/jquery.dropotron.min.js"></script>
-<script src="/js/browser.min.js"></script>
-<script src="/js/breakpoints.min.js"></script>
-<script src="/js/util.js"></script>
-<script src="/js/main.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.dropotron.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
 <script th:inline="javascript">
-    function goUpdate() {
-        let boardBno = [[${board.boardBno}]];
-        location.href = '/board/modify?boardBno=' + boardBno;
+    let boardBno = [[${board.boardBno}]];
+    let paging = [[${criteria.listLink}]];
+    console.log(paging);
+
+    function goUpdate(){
+        location.href = '/board/modify' + paging + '&boardBno=' + boardBno;
     }
+
+    $("a#goList").click(function(e){
+        e.preventDefault();
+        location.href = "/board/list" + paging;
+    })
 </script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

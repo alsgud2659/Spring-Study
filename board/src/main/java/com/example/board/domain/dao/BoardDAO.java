@@ -17,6 +17,7 @@ public class BoardDAO {
     public List<BoardVO> getList(Criteria criteria) {
         return boardMapper.getList(criteria);
     }
+
     //    게시글 등록
     public void register(BoardVO boardVO){
         boardMapper.insert(boardVO);
