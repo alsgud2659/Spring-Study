@@ -138,6 +138,7 @@
         $(pageForm).submit();
     });
 
+    //
     $("a.goRead").click(function(e){
         e.preventDefault();
         location.href = "/board/read" + paging + "&boardBno="+$(this).attr('href');
