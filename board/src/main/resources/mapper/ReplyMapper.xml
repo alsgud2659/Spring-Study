@@ -18,7 +18,7 @@
 
     <update id="update">
         UPDATE TBL_REPLY
-        SET REPLY_CONTENT = #{replyContent}, REPLY_UPDATE_DATE = SYSDATE
+        SET REPLY_CONTENT = #{replyContent}, REPLY_WRITER = #{replyWriter}, REPLY_UPDATE_DATE = SYSDATE
         WHERE REPLY_NUMBER = #{replyNumber}
     </update>
 

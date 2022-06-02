@@ -65,10 +65,15 @@
 <script src="/assets/js/breakpoints.min.js"></script>
 <script src="/assets/js/util.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/reply.js"></script>
 <script th:inline="javascript">
     let boardBno = [[${board.boardBno}]];
     let paging = [[${criteria.listLink}]];
     console.log(paging);
+
+    $(document).ready(function () {
+        console.log(replyservice);
+    });
 
     function goUpdate(){
         location.href = '/board/modify' + paging + '&boardBno=' + boardBno;

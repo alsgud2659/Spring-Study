@@ -6,6 +6,7 @@ package com.example.board.controller;
 *
 */
 
+import com.example.board.domain.vo.Criteria;
 import com.example.board.domain.vo.ReplyVO;
 import com.example.board.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -43,5 +46,43 @@ public class ReplyController {
         return replyService.read(replyNumber);
     }
 
-    
+    // 댓글 전체 목록 조회
+    @GetMapping("/list/{bno}/{page}")
+    public List<ReplyVO> getList(@PathVariable("page") int pageNum, @PathVariable("bno") Long boardBno){
+        log.info("list....... : " + boardBno);
+        return replyService.getList(new Criteria(pageNum,10), boardBno);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/remove/{rno}")
+    public String remove(@PathVariable("rno") Long replyNumber){
+        replyService.remove(replyNumber);
+        return "댓글 삭제 성공";
+    }
+
+    // 댓글 수정
+    // PUT : 자원의 전체 수정, 자원 내 모든 필드를 전달해야 함, 일부만 전달할 경우 오류
+    // PATCH : 자원의 일부 수정, 수정할 필드만 전송 (자동주입이 아닌 부분만 수정하는 쿼리문에서 사용)
+    //
+    @PatchMapping(value = {"/{rno}/{writer}", "/{rno}"}, consumes = "application/json")
+    public String modify(@PathVariable("rno") Long replyNumber, @PathVariable(value = "writer", required = false) String replyWriter, @RequestBody ReplyVO replyVO){
+        log.info("modify......... : " + replyVO);
+        log.info("modify......... : " + replyNumber);
+
+        if(replyVO.getReplyWriter() == null){ // JSON 검증
+            replyVO.setReplyWriter(Optional.ofNullable(replyWriter).orElse("anonymous")); // URI 검증
+        }
+        replyVO.setReplyNumber(replyNumber); // null값을 PATCH에서 직접 채워주는게 아니기 때문에 replyNumber를 반드시 채워줘야 함
+        replyService.modify(replyVO);
+        return "댓글 수정 성공";
+    }
+
+    // POST방식으로 댓글 수정
+    @PostMapping("/modify/{rno}/{replyWriter}")
+    public boolean modify2(@PathVariable("rno") Long replyNumber, @PathVariable("replyWriter") String replyWriter, @RequestBody ReplyVO replyVO){
+        log.info("modify ...... : " + replyVO);
+        replyVO.setReplyNumber(replyNumber);
+        replyVO.setReplyWriter(replyWriter);
+        return replyService.modify(replyVO);
+    }
 }
