@@ -73,8 +73,8 @@ public class ReplyController {
             replyVO.setReplyWriter(Optional.ofNullable(replyWriter).orElse("anonymous")); // URI 검증
         }
         replyVO.setReplyNumber(replyNumber); // null값을 PATCH에서 직접 채워주는게 아니기 때문에 replyNumber를 반드시 채워줘야 함
-        replyService.modify(replyVO);
-        return "댓글 수정 성공";
+        replyService.modify(replyVO); // 수정된 replyVO객체를 modify메소드의 파라미터로 넣은 후 실행
+        return "댓글 수정 성공"; // 댓글 수정 성공시 출력할 내용
     }
 
     // POST방식으로 댓글 수정

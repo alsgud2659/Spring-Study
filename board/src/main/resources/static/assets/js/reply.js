@@ -25,5 +25,27 @@ let replyService = (function(){
         });
     }
 
-    return {add: add};
+    function read(reply, callback, error) {
+        console.log("read reply..........");
+        $.ajax({
+            url: "reply/{rno}",
+            type: "post",
+            data: JSON.stringify(reply),
+            contentType: "application/json",
+            success: function (result) {
+
+            },
+            error: function (xhr, status, er) {
+                if(error){
+                    error(er);
+                }
+            }
+        })
+
+    }
+
+    return {
+        add: add,
+        read: read,
+    };
 })();

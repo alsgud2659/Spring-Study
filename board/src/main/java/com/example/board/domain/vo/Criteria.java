@@ -12,8 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class Criteria {
     private int pageNum; // 페이지 번호
     private int amount; // 한 페이지에 몇개의 게시글을 출력할지 정해주는 변수
-    private String type;
-    private String keyword;
+    private String type; // 검색필터 ex) 제목 + 내용 ... 등등
+    private String keyword; // 검색어
 
     public Criteria() {
         this(1, 10); // 기본생성자 호출시 페이지번호는 1, 한페이지에 뿌려지는 게시글 개수는 10개

@@ -22,5 +22,6 @@ public interface ReplyMapper {
     public int update(ReplyVO replyVO);
 
     //댓글 목록
+    // 파라미터가 여러개일 경우 어떤 값이 어디에 꽂히는지 @Param 어노테이션으로 알려줘야 함
     public List<ReplyVO> getList(@Param("criteria") Criteria criteria, @Param("boardBno") Long boardBno);
 }
