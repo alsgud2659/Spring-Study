@@ -8,6 +8,7 @@ package com.example.board.controller;
 
 import com.example.board.domain.vo.Criteria;
 import com.example.board.domain.vo.ReplyVO;
+import com.example.board.domain.vo.TestVO;
 import com.example.board.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,5 +86,44 @@ public class ReplyController {
         replyVO.setReplyNumber(replyNumber);
         replyVO.setReplyWriter(replyWriter);
         return replyService.modify(replyVO);
+    }
+
+    // 5개
+    // 1번 매개변수 없고 리턴은 문자열
+    @GetMapping("/test1")
+    public String test1() {
+        return "test1의 리턴입니다.";
+    }
+    // 2번 매개변수 1개 있고 리턴은 문자열
+    @GetMapping("/test2/{str}")
+    public String test2(@PathVariable("str") String str){
+        return str;
+    }
+    // 3번 매개변수 없고 리턴은 JSON Object
+    @PostMapping("/test3")
+    public TestVO test3() {
+        TestVO testVO = new TestVO();
+        testVO.setMemberName("이민형");
+        testVO.setMemeberAge("24");
+        testVO.setMemeberNumber("1");
+        return testVO;
+    }
+    // 4번 매개변수 여러 개 있고 리턴은 JSON Object
+    @PostMapping("/test4/{name}/{age}/{number}")
+    public TestVO test4(@PathVariable("name") String name, @PathVariable("age") String age, @PathVariable("number") String number) {
+        TestVO testVO = new TestVO();
+        testVO.setMemberName(name);
+        testVO.setMemeberAge(age);
+        testVO.setMemeberNumber(number);
+        return testVO;
+    }
+    // 5번 매개변수 여러 개 있고 리턴은 JSON Array
+    @PostMapping("/test5/{name}/{age}/{number}")
+    public List<String> test5(@PathVariable("name") String name, @PathVariable("age") String age, @PathVariable("number") String number){
+        List<String> list = new ArrayList<>();
+        list.add(name);
+        list.add(age);
+        list.add(number);
+        return list;
     }
 }

@@ -34,13 +34,13 @@ public class ReplyMapperTests {
 //        });
 //    }
 
-//    @Test
-//    public void getReply() {
-//        // 가져올 댓글 번호
-//        Long replyNumber = 1L;
-//        // 결과 출력
-//        log.info("가져온 댓글 : " + replyMapper.getReply(replyNumber).toString());
-//    }
+    @Test
+    public void getReply() {
+        // 가져올 댓글 번호
+        Long replyNumber = 1L;
+        // 결과 출력
+        log.info("가져온 댓글 : " + replyMapper.getReply(replyNumber).toString());
+    }
 
     @Test
     public void getListTest(){

@@ -66,13 +66,18 @@
 <script src="/assets/js/util.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/reply.js"></script>
+<script src="/assets/js/user.js"></script>
 <script th:inline="javascript">
     let boardBno = [[${board.boardBno}]];
     let paging = [[${criteria.listLink}]];
     console.log(paging);
 
     $(document).ready(function () {
-        console.log(replyservice);
+        console.log(replyService);
+    });
+
+    $(document).ready(function () {
+        console.log(userService);
     });
 
     function goUpdate(){
@@ -83,6 +88,109 @@
         e.preventDefault();
         location.href = "/board/list" + paging;
     })
+
+    // 댓글 추가
+    // replyService.add({
+    //     replyContent: "JS Module Test",
+    //     replyWriter: "이민형",
+    //     boardBno: boardBno
+    // }, function (result) {
+    //         alert(result);
+    //     },
+    //     function (a,b,c) {
+    //         console.log(a,b,c);
+    //     });
+
+    // 댓글 하나 가져오기
+    // replyService.get(
+    //     102,
+    //     function (result) {
+    //         console.log(result);
+    // }, function (a,b,c) {
+    //         console.log(a,b,c);
+    //     });
+
+    // 댓글 삭제
+    // replyService.remove(20,
+    //     function (result) {
+    //          console.log(result);
+    // }, function (a,b,c) {
+    //         console.log(a,b,c);
+    //     });
+
+    // 댓글 수정
+    // replyService.modify({
+    //         rno: 15,
+    //         replyContent: "PATCH Ajax 통신 완료",
+    //     },
+    //     function (result) {
+    //         console.log(result);
+    // }, function (a,b,c) {
+    //         console.log(a,b,c);
+    // })
+
+    // 댓글 전체 목록 가져오기
+    // replyService.getList({bno: boardBno, page:2},
+    //     function (result) {
+    //         console.log(result);
+    // }, function (a,b,c) {
+    //         console.log(a,b,c);
+    // });
+
+    // 1번 테스트
+    // replyService.test1(function (result) {
+    //     console.log(result);
+    // })
+
+    // 2번 테스트
+    // replyService.test2("안녕", function (result) {
+    //         console.log(result);
+    // })
+
+    // 3번 테스트
+    // replyService.test3(function (result) {
+    //         console.log(result);
+    // })
+
+    // 4번 테스트
+    // replyService.test4({name: "이민형", age: "24", number: "2"}, function (result) {
+    //         console.log(result);
+    // })
+
+    // 5번 테스트
+    // replyService.test5({name: "이민형", age: "24", number: "3"}, function (result) {
+    //         console.log(result);
+    // })
+
+    // 회원가입
+    // userService.add({
+    //     userId:"test999",
+    //     userPw:"1111",
+    //     userName:"테스트유저999"
+    // }, function (result) {
+    //     console.log(result);
+    // })
+
+    // 유저 정보 조회
+    // userService.read(1, function (result) {
+    //     console.log(result);
+    // })
+
+    // 유저 정보 수정
+    // userService.modify({
+    //     uno: 25,
+    //     userId: "test000",
+    //     userPw: "2222"
+    // }, function (result) {
+    //     console.log(result);
+    // })
+
+    // 회원 탈퇴
+    userService.remove(25, function (result) {
+        console.log(result);
+    })
+
+
 </script>
 </html>
 
