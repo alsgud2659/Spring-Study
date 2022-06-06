@@ -176,19 +176,19 @@
     //     console.log(result);
     // })
 
-    // 유저 정보 수정
-    // userService.modify({
-    //     uno: 25,
-    //     userId: "test000",
-    //     userPw: "2222"
-    // }, function (result) {
-    //     console.log(result);
-    // })
-
-    // 회원 탈퇴
-    userService.remove(25, function (result) {
+    //유저 정보 수정
+    userService.modify({
+        uno: 22,
+        userId: "test000",
+        userPw: "2222"
+    }, function (result) {
         console.log(result);
     })
+
+    // 회원 탈퇴
+    // userService.remove(25, function (result) {
+    //     console.log(result);
+    // })
 
 
 </script>
