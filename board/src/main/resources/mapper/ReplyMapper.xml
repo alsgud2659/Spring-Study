@@ -22,15 +22,31 @@
         WHERE REPLY_NUMBER = #{replyNumber}
     </update>
 
+<!--    <select id="getList" resultType="replyVO">-->
+<!--        <![CDATA[-->
+<!--        SELECT REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE FROM-->
+<!--            (-->
+<!--                SELECT /*+ INDEX_DESC(TBL_REPLY SYS_C007029) */ ROWNUM RN, REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE-->
+<!--                FROM TBL_REPLY-->
+<!--                WHERE BOARD_BNO = #{boardBno} AND ROWNUM <= #{criteria.pageNum} * #{criteria.amount}-->
+<!--            )-->
+<!--        WHERE RN > (#{criteria.pageNum} - 1) * #{criteria.amount}-->
+<!--        ]]>-->
+<!--    </select>-->
+
     <select id="getList" resultType="replyVO">
         <![CDATA[
         SELECT REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE FROM
             (
-                SELECT /*+ INDEX_DESC(SYS_C007029) */ ROWNUM RN, REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE
+                SELECT /*+ INDEX_DESC(TBL_REPLY SYS_C007029) */ ROWNUM RN, REPLY_NUMBER, BOARD_BNO, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE
                 FROM TBL_REPLY
-                WHERE BOARD_BNO = #{boardBno} AND ROWNUM <= #{criteria.pageNum} * #{criteria.amount}
+                WHERE BOARD_BNO = #{boardBno} AND ROWNUM <= #{criteria.pageNum} * #{criteria.amount} ORDER BY REPLY_UPDATE_DATE DESC
             )
         WHERE RN > (#{criteria.pageNum} - 1) * #{criteria.amount}
         ]]>
+    </select>
+
+    <select id="getTotal" resultType="_int">
+        SELECT COUNT(REPLY_NUMBER) FROM TBL_REPLY WHERE BOARD_BNO = #{boardBno}
     </select>
 </mapper>

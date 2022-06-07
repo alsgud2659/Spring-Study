@@ -1,12 +1,13 @@
 package com.example.board.controller;
 /*
 * REST (Representational State Transfer)
-*   하나의 URI는 하나의 고유한 리소르(데이터)를 대표하도록 설계된다.
+*   하나의 URI는 하나의 고유한 리소스(데이터)를 대표하도록 설계된다.
 *   예) /board/123 : 게시글 중 123번 게시글의 전체 정보
 *
 */
 
 import com.example.board.domain.vo.Criteria;
+import com.example.board.domain.vo.ReplyPageDTO;
 import com.example.board.domain.vo.ReplyVO;
 import com.example.board.domain.vo.TestVO;
 import com.example.board.service.ReplyService;
@@ -50,9 +51,9 @@ public class ReplyController {
 
     // 댓글 전체 목록 조회
     @GetMapping("/list/{bno}/{page}")
-    public List<ReplyVO> getList(@PathVariable("page") int pageNum, @PathVariable("bno") Long boardBno){
+    public ReplyPageDTO getList(@PathVariable("page") int pageNum, @PathVariable("bno") Long boardBno){
         log.info("list....... : " + boardBno);
-        return replyService.getList(new Criteria(pageNum,10), boardBno);
+        return new ReplyPageDTO(replyService.getList(new Criteria(pageNum, 10), boardBno), replyService.getTotal(boardBno));
     }
 
     // 댓글 삭제

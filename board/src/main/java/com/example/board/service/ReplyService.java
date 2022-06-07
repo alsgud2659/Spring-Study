@@ -45,4 +45,9 @@ public class ReplyService {
         log.info("getList........ : " + boardBno);
         return replyDAO.getList(criteria, boardBno);
     }
+
+    // 댓글 개수
+    public int getTotal(Long boardBno){
+        return replyDAO.getTotal(boardBno);
+    }
 }

@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="/assets/css/main.css" />
     <style>
         body {transform: scale(0.8);}
+        .line {
+            border-bottom: 1px solid #ff8b77;
+        }
+        li {
+            list-style: none;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +57,30 @@
                                 <input type="submit" class="button" value="삭제"/>
                             </li>
                         </ul>
+                        <ul class="icons">
+                            <li style="display: block">
+                                <span class="icon solid fa-envelope"></span>
+                                <strong>댓글</strong>
+                            </li>
+                        </ul>
+                        <a href="javascript:void(0)" class="register button primary small" style="width: 100%">댓글 등록</a>
+                        <div style="display: none" class="register-form">
+                            <div>
+                                <h4>작성자</h4>
+                                <input type="text" name="replier" placeholder="Replier">
+                            </div>
+                            <div>
+                                <h4>댓글</h4>
+                                <textarea rows="6" name="reply" placeholder="Reply" style="resize: none"></textarea>
+                            </div>
+                            <div style="text-align: right">
+                                <a href="javascript:void(0)" class="finish button primary small">등록</a>
+                                <a href="javascript:void(0)" class="cancel button primary small">취소</a>
+                            </div>
+                        </div>
+                        <ul class="replies"></ul>
                     </form>
+                    <div class="paging" style="text-align: center"></div>
                 </div>
             </div>
         </div>
@@ -66,18 +95,117 @@
 <script src="/assets/js/util.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/reply.js"></script>
-<script src="/assets/js/user.js"></script>
 <script th:inline="javascript">
+    let pageNum = 1;
     let boardBno = [[${board.boardBno}]];
     let paging = [[${criteria.listLink}]];
-    console.log(paging);
+    const replyUL = $("ul.replies");
 
-    $(document).ready(function () {
-        console.log(replyService);
+    showList(pageNum);
+
+    function showList(page){
+        replyService.getList({bno: boardBno, page: page}, function(total, list){
+            let str = "";
+
+            if(list == null || list.length == 0){
+                replyUL.html("");
+                return;
+            }
+            // each문으로 바꾸기
+            // 수정 되었을 때는 수정된 날짜로 출력하기
+            // 출력된 시간 순으로 목록 구성하기
+            $.each(list, function (i, reply) {
+                console.log(i);
+                str += "<li>";
+                str += "<strong>" + reply.replyWriter + "</strong>";
+                str += "<div style='display: flex; justify-content: space-between;'>";
+                str += "<p>" + reply.replyContent + "</p>"
+                str += "<p><strong>" + replyService.getReplyDateByJavaScript(reply.replyRegisterDate) + "</strong></p>"
+                str += "</div>";
+                str += "<div class='line'></div>";
+                str += "</li>";
+            });
+            // for(let i=0; i<list.length; i++){
+            //     str += "<li>";
+            //     str += "<strong>" + list[i].replyWriter + "</strong>";
+            //     str += "<div style='display: flex; justify-content: space-between;'>";
+            //     str += "<p>" + list[i].replyContent + "</p>"
+            //     str += "<p><strong>" + replyService.getReplyDateByJavaScript(list[i].replyRegisterDate) + "</strong></p>"
+            //     str += "</div>";
+            //     str += "<div class='line'></div>";
+            //     str += "</li>";
+            // }
+            replyUL.html(str);
+            showReplyPage(total);
+        });
+    }
+
+    function showReplyPage(total){
+        let endPage = Math.ceil(pageNum / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+        const $paging = $(".paging");
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        if(prev){
+            str += "<a class='changePage' href='" + (startPage - 1) + "'><code>&lt;</code></a>"
+        }
+        for(let i = startPage; i <= endPage; i++){
+            str += pageNum == i ? "<code>" + i + "</code>" : "<a class='changePage' href='" + i + "'><code>" + i + "</code></a>";
+        }
+        if(next){
+            str += "<a class='changePage' href='" + (endPage + 1) + "'><code>&gt;</code></a>"
+        }
+        $paging.html(str);
+    }
+
+    //이벤트 위임 ( $(...).on("event", "자식요소", callback) )
+    //기존 문서에 작성되지 않은 HTML 코드에 이벤트를 줄 때에는,
+    //컴파일 순서 상 DOM으로 작성한 코드가 더 늦게 실행되기 때문에,
+    //기존 문서에 작성된 HTML코드에 이벤트를 주고, 그 안에 추가할 자식 요소에 이벤트를 전달하는 형식으로 개발한다.
+
+    $(".paging").on("click", "a.changePage", function(e){
+        e.preventDefault();
+        pageNum = $(this).attr("href");
+        showList(pageNum);
     });
 
-    $(document).ready(function () {
-        console.log(userService);
+    $(".finish").click(function(e){
+        e.preventDefault();
+        const $replyWriter = $("input[name='replier']").val();
+        const $replyContent = $("textarea[name='reply']").val();
+
+        if(!$replyWriter || !$replyContent){
+            alert("내용을 입력해주세요.");
+            return;
+        }
+
+        replyService.add({boardBno: boardBno, replyWriter: $replyWriter, replyContent: $replyContent},
+            function(result){
+                $("input[name='replier']").val("");
+                $("textarea[name='reply']").val("");
+                showList(1);
+            });
+    })
+
+
+    $(".register").on("click", function(e){
+        e.preventDefault(); //기존 이벤트 없애기
+        $(".register-form").show();
+        $(this).hide();
+    });
+
+    $(".cancel").on("click", function(e){
+        e.preventDefault();
+        $(".register-form").hide();
+        $(".register").show();
     });
 
     function goUpdate(){
@@ -87,55 +215,34 @@
     $("a#goList").click(function(e){
         e.preventDefault();
         location.href = "/board/list" + paging;
-    })
+    });
 
-    // 댓글 추가
     // replyService.add({
     //     replyContent: "JS Module Test",
-    //     replyWriter: "이민형",
+    //     replyWriter: "hds1234",
     //     boardBno: boardBno
-    // }, function (result) {
-    //         alert(result);
-    //     },
-    //     function (a,b,c) {
-    //         console.log(a,b,c);
-    //     });
+    // }, function(result){
+    //     alert(result);
+    // }, function(a, b, c){console.log(a, b, c)});
 
-    // 댓글 하나 가져오기
-    // replyService.get(
-    //     102,
-    //     function (result) {
-    //         console.log(result);
-    // }, function (a,b,c) {
-    //         console.log(a,b,c);
-    //     });
-
-    // 댓글 삭제
-    // replyService.remove(20,
-    //     function (result) {
-    //          console.log(result);
-    // }, function (a,b,c) {
-    //         console.log(a,b,c);
-    //     });
-
-    // 댓글 수정
-    // replyService.modify({
-    //         rno: 15,
-    //         replyContent: "PATCH Ajax 통신 완료",
-    //     },
-    //     function (result) {
-    //         console.log(result);
-    // }, function (a,b,c) {
-    //         console.log(a,b,c);
-    // })
-
-    // 댓글 전체 목록 가져오기
-    // replyService.getList({bno: boardBno, page:2},
-    //     function (result) {
-    //         console.log(result);
-    // }, function (a,b,c) {
-    //         console.log(a,b,c);
+    // replyService.get(101, function(reply){
+    //     console.log(reply);
     // });
+
+    // replyService.remove(101, function(result){
+    //     alert(result);
+    // });
+
+    // replyService.modify({
+    //     rno: 31,
+    //     replyContent: "PATCH Ajax 통신 완료"
+    // }, function(result){
+    //     alert(result);
+    // });
+
+    // replyService.getList({bno: boardBno, page: 2}, function(list){
+    //     console.log(list);
+    // })
 
     // 1번 테스트
     // replyService.test1(function (result) {
@@ -177,20 +284,18 @@
     // })
 
     //유저 정보 수정
-    userService.modify({
-        uno: 22,
-        userId: "test000",
-        userPw: "2222",
-        userName:"수정된이름"
-    }, function (result) {
-        console.log(result);
-    })
+    // userService.modify({
+    //     uno: 23,
+    //     userPw: "3333",
+    //     userName:"수정된이름1"
+    // }, function (result) {
+    //     console.log(result);
+    // })
 
     // 회원 탈퇴
     // userService.remove(25, function (result) {
     //     console.log(result);
     // })
-
 
 </script>
 </html>

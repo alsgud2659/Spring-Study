@@ -57,4 +57,9 @@ public class ReplyServiceTests {
 //        replyService.getList(new Criteria(2, 10), 14L)
 //                .stream().map(ReplyVO::toString).forEach(log::info);
 //    }
+
+    @Test
+    public void getTotalTest(){
+        log.info("댓글 개수 : " + replyService.getTotal(15L));
+    }
 }

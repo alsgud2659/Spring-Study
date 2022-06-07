@@ -34,18 +34,21 @@ public class ReplyMapperTests {
 //        });
 //    }
 
+//    @Test
+//    public void getReply() {
+//        // 가져올 댓글 번호
+//        Long replyNumber = 1L;
+//        // 결과 출력
+//        log.info("가져온 댓글 : " + replyMapper.getReply(replyNumber).toString());
+//    }
+//
+//    @Test
+//    public void getListTest(){
+//        replyMapper.getList(new Criteria(2, 10), 14L)
+//                .stream().map(ReplyVO::toString).forEach(log::info);
+//    }
     @Test
-    public void getReply() {
-        // 가져올 댓글 번호
-        Long replyNumber = 1L;
-        // 결과 출력
-        log.info("가져온 댓글 : " + replyMapper.getReply(replyNumber).toString());
+    public  void getTotalTest(){
+        log.info("댓글 개수 : " + replyMapper.getTotal(15L));
     }
-
-    @Test
-    public void getListTest(){
-        replyMapper.getList(new Criteria(2, 10), 14L)
-                .stream().map(ReplyVO::toString).forEach(log::info);
-    }
-
 }

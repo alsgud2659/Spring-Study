@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  *   전체목록     /board/list          GET
  *   등록처리     /board/register      POST        모든 항목        필요         /board/list
- *   조회        /board/read          GET          bno
+ *   조회        /board/read          GET         bno
  *   삭제처리     /board/remove        GET         bno                         /board/list
  *   수정처리     /board/modify        POST        모든 항목        필요         /board/list
  *
