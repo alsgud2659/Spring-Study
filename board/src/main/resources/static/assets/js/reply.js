@@ -68,7 +68,7 @@ let replyService = (function(){
     function modify(reply, callback, error) {
         console.log("modify reply.......");
         $.ajax({
-            url: "/reply/" + reply.rno,
+            url: "/reply/" + reply.replyNumber,
             type: "patch",
             data: JSON.stringify(reply),
             contentType: "application/json",
@@ -159,7 +159,6 @@ let replyService = (function(){
         $.ajax({
             url: "/reply/test4/" + param.name + "/" + param.age + "/" + param.number,
             type: "post",
-            dataType: "json",
             success: function (result) {
                 if(callback){
                     callback(result);
@@ -185,7 +184,10 @@ let replyService = (function(){
     function getReplyDateByJavaScript(replyDate) {
         let today  = new Date();
         let rDate = new Date(replyDate);
+        console.log(today);
+        console.log(rDate);
         let gap = today.getTime() - rDate.getTime();
+        console.log(gap);
 
         if(gap < 1000 * 60 * 60 * 24) {
             let h = rDate.getHours();
@@ -202,6 +204,21 @@ let replyService = (function(){
         }
     }
 
+    // 댓글 수정 시간(JAVA)
+    function getReplyDateByController(replyDate){
+        let result;
+        $.ajax({
+            url: "/time",
+            type: "get",
+            data: {replyDate: replyDate},
+            async: false, //아래의 콜백함수의 연산이 모두 끝나고 나서 다음 작업이 진행된다.
+            success: function(time){
+                result = time;
+            }
+        });
+        return result;
+    }
+
     return {
         add: add,
         get: get,
@@ -209,6 +226,7 @@ let replyService = (function(){
         modify:modify,
         getList: getList,
         getReplyDateByJavaScript: getReplyDateByJavaScript,
+        getReplyDateByController: getReplyDateByController,
         test1: test1,
         test2: test2,
         test3: test3,

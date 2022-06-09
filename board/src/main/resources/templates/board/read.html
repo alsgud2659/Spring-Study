@@ -111,34 +111,98 @@
                 replyUL.html("");
                 return;
             }
-            // each문으로 바꾸기
-            // 수정 되었을 때는 수정된 날짜로 출력하기
-            // 출력된 시간 순으로 목록 구성하기
-            $.each(list, function (i, reply) {
-                console.log(i);
+            //숙제, each문으로 바꾸기
+            //     수정되었을 때에는 수정된 날짜로 출력하기
+            //     출력된 시간 순으로 목록 구성하기
+
+
+            $.each(list, function(i, reply){
                 str += "<li>";
-                str += "<strong>" + reply.replyWriter + "</strong>";
                 str += "<div style='display: flex; justify-content: space-between;'>";
-                str += "<p>" + reply.replyContent + "</p>"
-                str += "<p><strong>" + replyService.getReplyDateByJavaScript(reply.replyRegisterDate) + "</strong></p>"
+                str += "<strong style='display: block;'>" + reply.replyWriter + "</strong>";
+                str += "<div class='btns'>";
+                str += "<a class='modify " + reply.replyNumber + "' style='cursor: pointer;'>수정</a>"
+                str += "<a class='finish " + reply.replyNumber + "' style='display: none;cursor: pointer;'>수정완료</a>"
+                str += "&nbsp;&nbsp;<a class='remove " + reply.replyNumber + "' style='cursor: pointer;'>삭제</a>"
+                str += "</div>";
+                str += "</div>";
+                str += "<div style='display: flex; justify-content: space-between;'>";
+                str += "<p class='" + reply.replyNumber + "'>" + reply.replyContent + "</p>";
+                str += "<p><strong>";
+                str += reply.replyRegisterDate == reply.replyUpdateDate ? replyService.getReplyDateByJavaScript(reply.replyRegisterDate)
+                    : replyService.getReplyDateByController(reply.replyUpdateDate);
+                str += "</strong></p>";
                 str += "</div>";
                 str += "<div class='line'></div>";
                 str += "</li>";
             });
-            // for(let i=0; i<list.length; i++){
-            //     str += "<li>";
-            //     str += "<strong>" + list[i].replyWriter + "</strong>";
-            //     str += "<div style='display: flex; justify-content: space-between;'>";
-            //     str += "<p>" + list[i].replyContent + "</p>"
-            //     str += "<p><strong>" + replyService.getReplyDateByJavaScript(list[i].replyRegisterDate) + "</strong></p>"
-            //     str += "</div>";
-            //     str += "<div class='line'></div>";
-            //     str += "</li>";
-            // }
+
             replyUL.html(str);
             showReplyPage(total);
+
+            //     for(let i=0; i<list.length; i++){
+            //         str += "<li>";
+            //         str += "<strong>" + list[i].replyWriter + "</strong>";
+            //         str += "<div style='display: flex; justify-content: space-between;'>";
+            //         str += "<p>" + list[i].replyContent + "</p>"
+            //         str += "<p><strong>" + replyService.getReplyDateByJavascript(list[i].replyRegisterDate) + "</strong></p>"
+            //         str += "</div>";
+            //         str += "<div class='line'></div>";
+            //         str += "</li>";
+            //     }
+            //     replyUL.html(str);
+            //     showReplyPage(total);
         });
     }
+
+    //댓글 삭제
+    $(".replies").on("click", "div.btns a.remove", function(e){
+        e.preventDefault();
+        if(check) {
+            alert("이미 수정중인 댓글이 있습니다.");
+            return;
+        }
+        replyService.remove(this.classList[1], function(result){
+            alert(result);
+            showList(pageNum);
+        });
+    });
+
+    let check = false;
+
+    //댓글 수정
+    $(".replies").on("click", "div.btns a.modify", function(e){
+        e.preventDefault();
+        if(check) {
+            alert("이미 수정중인 댓글이 있습니다.");
+            return;
+        }
+        let replyNumber = this.classList[1];
+        let str = "";
+
+        $("a." + replyNumber).show();
+        $(this).hide();
+
+        str += "<textarea class='" + replyNumber + "' style='resize: none;'>";
+        str += $("p." + replyNumber).text();
+        str += "</textarea>";
+
+        $("p." + replyNumber).replaceWith(str);
+        $("textarea." + replyNumber).css("width", "75%");
+
+        check = true;
+    });
+
+    //수정 완료
+    $(".replies").on("click", "div.btns a.finish", function(e){
+        e.preventDefault();
+        let replyNumber = this.classList[1];
+        replyService.modify({replyNumber: replyNumber, replyContent: $("textarea." + replyNumber).val()}, function(result){
+            alert(result);
+            showList(pageNum);
+            check = false;
+        })
+    });
 
     function showReplyPage(total){
         let endPage = Math.ceil(pageNum / 10.0) * 10;
@@ -192,6 +256,8 @@
                 $("input[name='replier']").val("");
                 $("textarea[name='reply']").val("");
                 showList(1);
+                $(".register-form").hide();
+                $(".register").show();
             });
     })
 
@@ -242,59 +308,6 @@
 
     // replyService.getList({bno: boardBno, page: 2}, function(list){
     //     console.log(list);
-    // })
-
-    // 1번 테스트
-    // replyService.test1(function (result) {
-    //     console.log(result);
-    // })
-
-    // 2번 테스트
-    // replyService.test2("안녕", function (result) {
-    //         console.log(result);
-    // })
-
-    // 3번 테스트
-    // replyService.test3(function (result) {
-    //         console.log(result);
-    // })
-
-    // 4번 테스트
-    // replyService.test4({name: "이민형", age: "24", number: "2"}, function (result) {
-    //         console.log(result);
-    // })
-
-    // 5번 테스트
-    // replyService.test5({name: "이민형", age: "24", number: "3"}, function (result) {
-    //         console.log(result);
-    // })
-
-    // 회원가입
-    // userService.add({
-    //     userId:"test999",
-    //     userPw:"1111",
-    //     userName:"테스트유저999"
-    // }, function (result) {
-    //     console.log(result);
-    // })
-
-    // 유저 정보 조회
-    // userService.read(1, function (result) {
-    //     console.log(result);
-    // })
-
-    //유저 정보 수정
-    // userService.modify({
-    //     uno: 23,
-    //     userPw: "3333",
-    //     userName:"수정된이름1"
-    // }, function (result) {
-    //     console.log(result);
-    // })
-
-    // 회원 탈퇴
-    // userService.remove(25, function (result) {
-    //     console.log(result);
     // })
 
 </script>
