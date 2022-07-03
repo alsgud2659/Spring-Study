@@ -5,5 +5,6 @@
         <typeAlias type="com.example.board.domain.vo.BoardVO" alias="boardVO"/>
         <typeAlias type="com.example.board.domain.vo.ReplyVO" alias="replyVO"/>
         <typeAlias type="com.example.board.domain.vo.UserVO" alias="userVO"/>
+        <typeAlias type="com.example.board.domain.vo.FileVO" alias="fileVO"/>
     </typeAliases>
 </configuration>

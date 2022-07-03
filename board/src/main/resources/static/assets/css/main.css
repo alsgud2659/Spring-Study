@@ -4492,3 +4492,17 @@ input, select, textarea {
 			}
 
 		}
+
+		.uploadResult {
+			width: 100%;
+		}
+
+		.uploadResult ul {
+			display: flex;
+			justify-content: left;
+		}
+
+		.uploadResult ul li{
+			list-style: none;
+			padding: 10px;
+		}

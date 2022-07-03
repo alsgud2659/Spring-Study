@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="/assets/css/admin/admin.css" />
+</head>
+
+<body>
+<div class="all-change">
+    <div class="header-change">
+        <p class="h-change">Buskers</p>
+        <h1 class="h-change"><a href="" class="btn-home"><img src="/images/admin/home.png" width="15px;" height="15px;" alt=""> 관리자 페이지</a></h1>
+        <ul class="h-change">
+            <li><a href="" class="btn-artist"><img src="/images/admin/art-studies.png" width="15px;" height="15px;" alt="">&nbsp;&nbsp;아티스트 관리</a></li>
+            <!-- <a href="https://www.flaticon.com/free-icons/art" title="art icons">Art icons created by Hilmy Abiyyu A. - Flaticon</a> -->
+            <li><a href="" class="btn-notice"><img src="/images/admin/recruitment.png" width="15px;" height="15px;" alt="">&nbsp;&nbsp;모집 공고 관리</a></li>
+            <!-- <a href="https://www.flaticon.com/free-icons/recruitment" title="recruitment icons">Recruitment icons created by Icon home - Flaticon</a> -->
+            <li><a href="" class="btn-work"><img src="/images/admin/premium-icon-page-3151429.png" width="15px;" height="15px;" alt="">&nbsp;&nbsp;작품 관리</a></li>
+            <!-- <a href="https://www.flaticon.com/kr/free-icons/-" title="직업과 직업 아이콘">직업과 직업 아이콘  제작자: verry purnomo - Flaticon</a> -->
+            <li><a href="" class="btn-user"><img src="/images/admin/free-icon-user-456212.png" width="15px;" height="15px;" alt="">&nbsp;&nbsp;회원 관리</a></li>
+            <!-- <a href="https://www.flaticon.com/kr/free-icons/" title=" 아이콘"> 아이콘  제작자: Freepik - Flaticon</a> -->
+            <!-- <li><a href="" class="btn-inquiry">문의 관리</a></li> -->
+        </ul>
+    </div>
+    <div class="field-display">
+        <div class="admin-name">
+            <h1>관리자 이름</h1>
+            <div class="btn-main-border">
+                <a href="/main/" class="btn-main">메인으로 돌아가기</a>
+            </div>
+        </div>
+        <div class="home-display">
+            <div class="left-today">
+                <div class="today">
+                    <h5 class="audit">오늘의 할일&nbsp;<p class="circle">11</p>
+                    </h5>
+                    <ul>
+                        <li class="audit"><a href="" class="btn-artist">아티스트심사</a>&nbsp;
+                            <th:block th:object="${artistPageDTO}">
+                                <p class="todayArtistApply" th:text="*{total}"></p>
+                            </th:block>
+                        </li>
+                        <li class="audit"><a href="" class="btn-notice">모집공고관리</a>&nbsp;
+                            <th:block th:object="${recruitPageDTO}">
+                                <p class="todayRecruit" th:text="*{total}"></p>
+                            </th:block>
+                        </li>
+                        <li class="audit"><a href="" class="btn-work">작품심사</a>&nbsp;
+                            <th:block th:object="${workPageDTO}">
+                                <p class="todayWorkApply" th:text="*{total}"></p>
+                            </th:block>
+                        </li>
+                        <li class="audit"><a href="" class="btn-user">회원관리</a>&nbsp;
+                            <th:block th:object="${userPageDTO}">
+                                <p class="totalUser" th:text="*{total}"></p>
+                            </th:block>
+                        </li>
+                        <!--                             <li><a href="" class="btn-inquiry">작품 수정 신청<p></p></a>-->
+                        <!--                            </li> -->
+                    </ul>
+                </div>
+                <div class="artist-list" style="height: 423px;">
+                    <table>
+                        <h4>최신 작품 신청</h4>
+                        <tr>
+                            <th>일자</th>
+                            <th>작품명</th>
+                            <th>신청자 이름</th>
+                            <th>상세 보기</th>
+                        </tr>
+                        <th:block th:each="works:${workListSmall}">
+                            <tr th:object="${works}">
+                                <td th:text="*{workRegisterDate}"></td>
+                                <td th:text="*{workName}"></td>
+                                <td th:text="*{artistName}"></td>
+                                <td><a th:href="@{/admin/registerApplyRead(workNumber=*{workNumber})}">내용 보기</a></td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </div>
+                <div class="artist-list" style="height: 423px;">
+                    <table>
+                        <h4>최신 아티스트 신청</h4>
+                        <tr>
+                            <th>번호</th>
+                            <th>이름</th>
+                            <th>설명</th>
+                            <th>신청자 아이디</th>
+                            <th>카테고리</th>
+                        </tr>
+                        <th:block th:each="artists:${artistApplyListSmall}">
+                            <tr th:object="${artists}">
+                                <td th:text="*{artistNumber}"></td>
+                                <td th:text="*{artistName}"></td>
+                                <td><a th:href="@{/artist/artistInfo(artistNumber=*{artistNumber})}">내용 보기</a></td>
+                                <td th:text="*{userId}"></td>
+                                <td th:if="*{artistType.toString().equals('1')}">뮤지션</td>
+                                <td th:if="*{artistType.toString().equals('2')}">아티스트</td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </div>
+                <div class="artist-list">
+                    <table>
+                        <h4>최신 모집 공고</h4>
+                        <tr>
+                            <th>제목</th>
+                            <th>설명</th>
+                            <th>실행일자</th>
+                        </tr>
+                        <th:block th:each="recruits:${recruitListSmall}">
+                            <tr th:object="${recruits}">
+                                <td th:text="*{recruitmentName}"></td>
+                                <td><a th:href="@{/recruit/recruitInfo(recruitmentNumber=*{recruitmentNumber})}">내용 보기</a></td>
+                                <td th:text="*{recruitmentDay}"></td>
+                            </tr>
+                        </th:block>
+
+                    </table>
+                </div>
+                <div class="artist-list">
+                    <table>
+                        <h4>최신 회원</h4>
+                        <tr>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>핸드폰 번호</th>
+                            <th>등록 일자</th>
+                        </tr>
+                        <th:block th:each="users:${userListSmall}">
+                            <tr th:object="${users}">
+                                <td th:text="*{userId}"></td>
+                                <td th:text="*{userName}"></td>
+                                <td th:text="*{userPhoneNumber}"></td>
+                                <td th:text="*{userRegisterDate}"></td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </div>
+            </div>
+            <div class="right-set">
+                <div class="right-field">
+                    <img src="/images/admin/free-icon-unknown-3088765.png" class="icon" width="40px;"
+                         height="40px;" alt="">
+                    <!-- <a href="https://www.flaticon.com/kr/free-icons/-" title="알 수 없는 아이콘">알 수 없는 아이콘  제작자: Freepik - Flaticon</a> -->
+                    <div class="admin-field">
+                        <h4 th:text="${userName}"></h4>
+                        <p th:text="${userEmail}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="artist-list-field" style="display: none;">
+            <div class="page-change">
+                <table>
+                    <div class="artist_menu_wrap">
+                        <h4 class="artist_menu"><a href="javascript:changeList(0)" class="on">아티스트 등록 신청</a> | <a href="javascript:changeList(1)">아티스트 수정 신청</a> | <a href="javascript:viewAll()">등록된 아티스트</a></h4>
+                    </div>
+                    <thead>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>설명</th>
+                    <th>신청자 아이디</th>
+                    <th>카테고리</th>
+                    <th>심사</th>
+                    </thead>
+                    <tbody class="artists">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mypage-paging">
+                <div class="mypage-pageStyle artist_page">
+
+                </div>
+            </div>
+        </div>
+        <div class="notice-list-field" style="display: none;">
+            <div class="page-change">
+                <table>
+                    <div class="notice-name">
+                        <h4>모집 공고 작성 및 관리</h4>
+                        <a href="/recruit/recruitRegister" class="btn-notice-write">작성</a>
+                    </div>
+                    <thead>
+                    <th>일자</th>
+                    <th>제목</th>
+                    <th>설명</th>
+                    <th>외부 링크</th>
+                    <th>실행 일자</th>
+                    <th>수정</th>
+                    </thead>
+                    <tbody class="recruitments">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mypage-paging">
+                <div class="mypage-pageStyle recruit_page">
+
+                </div>
+            </div>
+        </div>
+        <div class="work-list-field" style="display: none;">
+            <div class="page-change">
+                <table>
+                    <h4>작품 심사 및 관리</h4>
+                    <thead>
+                    <th>일자</th>
+                    <th>제목</th>
+                    <th>이름</th>
+                    <th>설명</th>
+                    <th>작품 링크</th>
+                    <th>심사</th>
+                    </thead>
+                    <tbody class="works">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mypage-paging">
+                <div class="mypage-pageStyle work_page">
+
+                </div>
+            </div>
+        </div>
+        <div class="user-list-field" style="display: none;">
+            <div class="page-change">
+                <table>
+                    <div class="user_menu_wrap">
+                        <h4 class="user_menu"><a href="javascript:changeRange(0)" class="on">전체 회원</a> | <a href="javascript:changeRange(1)">아티스트 등록 회원</a></h4>
+                    </div>
+                    <div class="user_search_wrap">
+                        <input type="text" class="search" name="keyword">
+                        <a href="" class="go_search"><img src="http://tkfile.yes24.com/imgNew/common/pf-srch-w.png" alt="" class="fixed"></a>
+                    </div>
+                    <thead>
+                    <th>번호</th>
+                    <th>아이디</th>
+                    <th>아티스트 등록 여부</th>
+                    <th>이름</th>
+                    <th>핸드폰 번호</th>
+                    <th>등록 일자</th>
+                    <th>수정</th>
+                    </thead>
+                    <tbody class="users">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mypage-paging">
+                <div class="mypage-pageStyle user_page">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(".btn-artist").on("click", function (e) {
+        e.preventDefault();
+        $(".right-field").hide();
+        $(".left-today").hide();
+        $(".manager-set").hide();
+        $(".notice-list-field").hide();
+        $(".work-list-field").hide();
+        $(".user-list-field").hide();
+        $(".artist-list-field").show();
+    });
+    $(".btn-notice").on("click", function (e) {
+        e.preventDefault();
+        $(".left-today").hide();
+        $(".right-field").hide();
+        $(".manager-set").hide();
+        $(".artist-list-field").hide();
+        $(".work-list-field").hide();
+        $(".user-list-field").hide();
+        $(".notice-list-field").show();
+    });
+
+    $(".btn-work").on("click", function (e) {
+        e.preventDefault();
+        $(".left-today").hide();
+        $(".right-field").hide();
+        $(".manager-set").hide();
+        $(".artist-list-field").hide();
+        $(".notice-list-field").hide();
+        $(".user-list-field").hide();
+        $(".work-list-field").show();
+    });
+    $(".btn-user").on("click", function (e) {
+        e.preventDefault();
+        $(".left-today").hide();
+        $(".right-field").hide();
+        $(".manager-set").hide();
+        $(".artist-list-field").hide();
+        $(".notice-list-field").hide();
+        $(".work-list-field").hide();
+        $(".user-list-field").show();
+    });
+    $(".btn-home").on("click", function (e) {
+        e.preventDefault();
+        $(".artist-list-field").hide();
+        $(".notice-list-field").hide();
+        $(".work-list-field").hide();
+        $(".user-list-field").hide();
+        $(".left-today").show();
+        $(".right-field").show();
+        $(".manager-set").show();
+    });
+</script>
+<script src="/assets/js/admin/admin.js"></script>
+<script th:inline="javascript">
+    const session = [[${session.userNumber}]];
+    let pageNumW = 1; // 작품 신청 목록 페이지 넘버
+    let pageNumR = 1; // 모집 공고 목록 페이지 넘버
+    let pageNumU = 1; // 유저 목록 페이지 넘버
+    let pageNumA = 1; // 아티스트 목록 페이지 넘버
+    let $workTr = $(".works"); // 작품 신청 목록이 들어갈 자리
+    let $recruitTr = $(".recruitments"); // 모집 공고 목록이 들어갈 자리
+    let $userTr = $(".users"); // 유저 목록이 들어갈 자리
+    let $artistTr = $(".artists");
+    const $pagingW = $(".work_page");
+    const $pagingR = $(".recruit_page");
+    const $pagingU = $(".user_page");
+    const $pagingA = $(".artist_page");
+    let isArtist = false;
+    let isUpdate = false;
+    let keyword = null;
+    let todayWorkApply = parseInt($(".todayWorkApply").text());
+    let todayRecruit = parseInt($(".todayRecruit").text());
+    let todayArtistApply = parseInt($(".todayArtistApply").text());
+    let today = todayWorkApply + todayArtistApply + todayRecruit;
+    $(".circle").html(today);
+    let remember = [[${criteria.listLink}]]; // 페이지 기억
+
+    console.log(session);
+
+    $(".go_search").on("click", function (e) {
+        e.preventDefault();
+        if($("input[name='keyword']").val() == null){
+            alert("검색어를 입력해 주세요");
+            return;
+        }
+        keyword = $("input[name='keyword']").val();
+        goSearch(1, keyword);
+    })
+
+
+    showWorkApplyList(pageNumW);    // 작품 신청 전체 목록 띄우기
+    showRecruitmentList(pageNumR);  // 모집 공고 전체 목록 띄우기
+    showUserList(pageNumU);         // 유저 목록 띄우기
+    showArtistApplyList(pageNumA)   // 아티스트 목록 띄우기
+
+    // 작품 등록 신청 목록
+    function showWorkApplyList(page) {
+        adminService.getWorkApplyList(page, function (list) {
+            $workTr.empty();
+            let str = "";
+            console.log(list);
+            if(list == null || list.length == 0) {
+                $workTr.html("");
+                return;
+            }
+
+            $.each(list.list, function (i, works) {
+                str += "<tr>";
+                str += "<td>" + works.workRegisterDate + "</td>";
+                str += "<td>" + works.workName + "</td>";
+                str += "<td>" + works.artistName + "</td>";
+                str += `<td><a href="/work/workInfo?workNumber=${works.workNumber}">상세 보기</a></td>`
+                str += "<td><a href='" + works.workPurchaseUrl + "'>구매 링크</a></td>";
+                str += `<td><a class="approve" href="javascript:approve(${works.workNumber})">승인</a> | <a class="reject" href="javascript:reject(${works.workNumber})">반려</a></td>`
+                str += "</tr>";
+            });
+            $workTr.append(str);
+            pageNumW = page;
+            showWorkPage(list.total);
+        });
+    }
+
+    // 작품 신청 목록 페이징 처리
+    function showWorkPage(total) {
+        $pagingW.empty();
+        let endPage = Math.ceil(pageNumW / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        //str += "<a class=\"mypage-page-first changePage\" href='" + "workApplyList/" + 1 + "'>&lt;&lt;</a>";
+        str += `<a class="mypage-page-first changePage" href="javascript:showWorkApplyList(${1})">&lt;&lt;</a>`;
+        if(prev) {
+            //str += "<a class='mypage-page-prev' href='" + "workApplyList/" + (startPage - 1) + "'><code>&lt;</code></a>";
+            str += `<a class="mypage-page-prev" href="javascript:showWorkApplyList(${startPage-1})">&lt;</a>`
+        }
+        for(let i = startPage; i <= endPage; i++){
+            //str += pageNum == i ? "<p>" + i +"</p>": "<a class='changePage' href='" + "workApplyList/" + i + "'>" + i + "</a>";
+            str += pageNumW == i ? `<p>${i}</p>` : `<a class="changePage" href="javascript:showWorkApplyList(${i})">${i}</a>`
+        }
+        if(next){
+            //str += "<a class='mypage-page-next' href='" + "workApplyList/" + (endPage + 1) + "'>&gt;</a>";
+            str += `<a class="mypage-page-next changePage" href="javascript:showWorkApplyList(${endPage+1})">&gt;</a>`
+        }
+        //str += "<a class='mypage-page-last changePage' href='" + "javascript:showWorkApplyList(" + realEnd + ")" +"'>&gt;&gt;</a>";
+        str += `<a class="mypage-page-last changePage" href="javascript:showWorkApplyList(${realEnd})">&gt;&gt;</a>`;
+
+        $pagingW.append(str);
+    }
+
+    // 모집 공고 리스트
+    function showRecruitmentList(page) {
+        adminService.getRecruitmentList(page, function (list) {
+            $recruitTr.empty();
+            let str = "";
+            console.log(list);
+
+            if(list == null || list.length == 0) {
+                $recruitTr.html("");
+                return;
+            }
+            $.each(list.list, function (i, recruits) {
+                str += `<tr>`;
+                str += `<td>${recruits.recruitmentRegisterDate}</td>`;
+                str += `<td>${recruits.recruitmentName}</td>`;
+                str += `<td><a href="/recruit/recruitInfo?recruitmentNumber=${recruits.recruitmentNumber}">내용 보기</a></td>`
+                str += `<td><a href="${recruits.recruitmentUrl}">본문 링크</a></td>`;
+                str += `<td>${recruits.recruitmentDay}</td>`;
+                str += `<td><a href="/recruit/recruitUpdate${remember}&recruitmentNumber=${recruits.recruitmentNumber}">수정</a> | <a href="javascript:removeRecruitment(${recruits.recruitmentNumber})">삭제</a></td>`
+                str += `</tr>`;
+            });
+            $recruitTr.append(str);
+            pageNumR = page;
+            showRecruitmentPage(list.total);
+        });
+    }
+
+    // 모집공고 페이징
+    function showRecruitmentPage(total) {
+        $pagingR.empty();
+        let endPage = Math.ceil(pageNumR / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        str += `<a class="mypage-page-first changePage" href="javascript:showRecruitmentList(${1})">&lt;&lt;</a>`;
+        if(prev) {
+            str += `<a class="mypage-page-prev" href="javascript:showRecruitmentList(${startPage-1})">&lt;</a>`;
+        }
+        for(let i = startPage; i <= endPage; i++){
+            str += pageNumR == i ? `<p>${i}</p>` : `<a class="changePage" href="javascript:showRecruitmentList(${i})">${i}</a>`;
+        }
+        if(next){
+            str += `<a class="mypage-page-next changePage" href="javascript:showRecruitmentList(${endPage+1})">&gt;</a>`;
+        }
+        str += `<a class="mypage-page-last changePage" href="javascript:showRecruitmentList(${realEnd})">&gt;&gt;</a>`;
+
+        $pagingR.append(str);
+    }
+
+    // 유저 리스트
+    function showUserList(page) {
+        adminService.getUserList({page:page, isArtist:isArtist}, function (list) {
+            $userTr.empty();
+            let str = "";
+            console.log(list);
+
+            if(list == null || list.length == 0) {
+                $userTr.html("");
+                return;
+            }
+
+            $.each(list.list, function (i, users) {
+                let isRegi = "X"
+                if(users.artistStatus == 3){
+                    isRegi = "O";
+                }
+                str += `<tr>`;
+                str += `<td>${users.userNumber}</td>`;
+                str += `<td>${users.userId}</td>`;
+                str += `<td>${isRegi}</td>`
+                str += `<td>${users.userName}</td>`;
+                str += `<td>${users.userPhoneNumber}</td>`;
+                str += `<td>${users.userRegisterDate}</td>`;
+                str += `<td><a href="javascript:deleteUser(${users.userNumber})">탈퇴</a></td>`;
+                str += `</tr>`;
+            });
+            $userTr.append(str);
+            pageNumU = page;
+            showUserPage(list.total);
+        })
+    }
+
+    // 유저 리스트 페이징
+    function showUserPage(total) {
+        $pagingU.empty();
+        let endPage = Math.ceil(pageNumU / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        str += `<a class="mypage-page-first changePage" href="javascript:showUserList(${1})">&lt;&lt;</a>`;
+        if(prev) {
+            str += `<a class="mypage-page-prev" href="javascript:showUserList(${startPage-1})">&lt;</a>`;
+        }
+        for(let i = startPage; i <= endPage; i++){
+            str += pageNumU == i ? `<p>${i}</p>` : `<a class="changePage" href="javascript:showUserList(${i})">${i}</a>`;
+        }
+        if(next){
+            str += `<a class="mypage-page-next changePage" href="javascript:showUserList(${endPage+1})">&gt;</a>`;
+        }
+        str += `<a class="mypage-page-last changePage" href="javascript:showUserList(${realEnd})">&gt;&gt;</a>`;
+
+        $pagingU.append(str);
+    }
+
+    // 유저 탈퇴
+    function deleteUser(uno) {
+        adminService.deleteUser(uno, function (result) {
+            alert(result);
+            showUserList(pageNumU);
+        })
+    }
+
+    // 전체 회원, 아티스트 등록 회원 범주 변환
+    function changeRange(flag) {
+        if(flag == 1){
+            isArtist = true;
+            showUserList(1);
+        } else{
+            isArtist = false;
+            showUserList(1);
+        }
+    }
+
+    // 회원 검색
+    function goSearch(page, keyword) {
+        isArtist = false;
+        adminService.getUserSearchResult({page:page, isArtist:isArtist, keyword:keyword}, function (list) {
+            $userTr.empty();
+            let str = "";
+            console.log(list);
+
+            if(list == null || list.length == 0) {
+                $userTr.html("");
+                return;
+            }
+
+            $.each(list.list, function (i, users) {
+                let isRegi = "X"
+                if(users.userArtistStatus == 4){
+                    isRegi = "O";
+                }
+                str += `<tr>`;
+                str += `<td>${users.userNumber}</td>`;
+                str += `<td>${users.userId}</td>`;
+                str += `<td>${isRegi}</td>`
+                str += `<td>${users.userName}</td>`;
+                str += `<td>${users.userPhoneNumber}</td>`;
+                str += `<td>${users.userRegisterDate}</td>`;
+                str += `<td><a href="javascript:deleteUser(${users.userNumber})">탈퇴</a></td>`;
+                str += `</tr>`;
+            });
+            $userTr.append(str);
+            pageNumU = page;
+            showSearchPage(list.total, keyword);
+        })
+    }
+
+    // 회원 검색 페이징
+    function showSearchPage(total, keyword) {
+        $pagingU.empty();
+        let endPage = Math.ceil(pageNumU / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        str += `<a class="mypage-page-first changePage" href="javascript:goSearch(${1},'${keyword}')">&lt;&lt;</a>`;
+        if(prev) {
+            str += `<a class="mypage-page-prev" href="javascript:goSearch(${startPage-1},'${keyword}')">&lt;</a>`;
+        }
+        for(let i = startPage; i <= endPage; i++){
+            str += pageNumU == i ? `<p>${i}</p>` : `<a class="changePage" href="javascript:goSearch(${i},'${keyword}')">${i}</a>`;
+        }
+        if(next){
+            str += `<a class="mypage-page-next changePage" href="javascript:goSearch(${endPage+1},'${keyword}')">&gt;</a>`;
+        }
+        str += `<a class="mypage-page-last changePage" href="javascript:goSearch(${realEnd},'${keyword}')">&gt;&gt;</a>`;
+
+        $pagingU.append(str);
+    }
+
+    function showArtistApplyList(page) {
+        adminService.getArtistApplyList({page:page, isUpdate:isUpdate}, function (list) {
+            $artistTr.empty();
+            let str = "";
+            console.log(list);
+
+            if(list == null || list.length == 0) {
+                $artistTr.html("");
+                return;
+            }
+
+            $.each(list.list, function (i, artists) {
+                let category = "뮤지션"
+                if(artists.artistType == '2'){
+                    category = "퍼포먼스";
+                }
+                str += `<tr>`;
+                str += `<td>${artists.artistNumber}</td>`;
+                str += `<td>${artists.artistName}</td>`;
+                str += `<td><a href="/artist/artistInfo?artistNumber=${artists.artistNumber}">상세 보기</a></td>`;
+                str += `<td>${artists.userId}</td>`;
+                str += `<td>${category}</td>`
+                str += `<td><a href="javascript:approveArtist(${artists.artistNumber})">승인</a> | <a href="javascript:rejectArtist(${artists.artistNumber})">반려</a></td>`;
+                str += `</tr>`;
+            });
+            $artistTr.append(str);
+            pageNumA = page;
+            showArtistPage(list.total);
+        })
+    }
+
+    function showArtistList(page) {
+        adminService.getArtistList(page, function (list) {
+            $artistTr.empty();
+            let str = "";
+            console.log(list);
+
+            if(list == null || list.length == 0) {
+                $artistTr.html("");
+                return;
+            }
+
+            $.each(list.list, function (i, artists) {
+                let category = "뮤지션"
+                if(artists.artistType == 2){
+                    category = "퍼포먼스";
+                }
+                str += `<tr>`;
+                str += `<td>${artists.artistNumber}</td>`;
+                str += `<td>${artists.artistName}</td>`;
+                str += `<td><a href="/artist/artistInfo?artistNumber=${artists.artistNumber}">상세 보기</a></td>`;
+                str += `<td>${artists.userId}</td>`;
+                str += `<td>${category}</td>`
+                str += `<td><a href="javascript:removeArtist(${artists.artistNumber})">정지</a></td>`;
+                str += `</tr>`;
+            });
+            $artistTr.append(str);
+            pageNumA = page;
+            showArtistPage(list.total);
+        })
+    }
+
+    function showArtistPage(total) {
+        $pagingA.empty();
+        let endPage = Math.ceil(pageNumA / 10.0) * 10;
+        let startPage = endPage - 9;
+        let realEnd = Math.ceil(total / 10.0);
+
+        if(endPage > realEnd){
+            endPage = realEnd;
+        }
+
+        let prev = startPage > 1;
+        let next = endPage * 10 < total;
+        let str = "";
+
+        str += `<a class="mypage-page-first changePage" href="javascript:showArtistList(${1})">&lt;&lt;</a>`;
+        if(prev) {
+            str += `<a class="mypage-page-prev" href="javascript:showArtistList(${startPage-1})">&lt;</a>`;
+        }
+        for(let i = startPage; i <= endPage; i++){
+            str += pageNumA == i ? `<p>${i}</p>` : `<a class="changePage" href="javascript:showArtistList(${i})">${i}</a>`;
+        }
+        if(next){
+            str += `<a class="mypage-page-next changePage" href="javascript:showArtistList(${endPage+1})">&gt;</a>`;
+        }
+        str += `<a class="mypage-page-last changePage" href="javascript:showArtistList(${realEnd})">&gt;&gt;</a>`;
+
+        $pagingA.append(str);
+    }
+
+    // 아티스트 등록 신청, 아티스트 수정신청 전환
+    function changeList(flag) {
+        if(flag == 1) {
+            isUpdate = true;
+            showArtistApplyList(1);
+        }
+        if(flag == 0) {
+            isUpdate = false;
+            showArtistApplyList(1);
+        }
+    }
+
+    // 전체 아티스트 전환
+    function viewAll() {
+        showArtistList(1);
+    }
+
+    // 작품 신청 승인
+    function approve(wno) {
+        adminService.approve(wno, function (result) {
+            alert(result);
+            showWorkApplyList(pageNumW);
+        })
+    }
+
+    // 작품 신청 반려
+    function reject(wno) {
+        adminService.reject(wno, function (result) {
+            alert(result);
+            showWorkApplyList(pageNumW);
+        })
+    }
+
+    // 모집 공고 삭제
+    function removeRecruitment(rno) {
+        adminService.removeRecruitment(rno, function (result) {
+            alert(result);
+            showRecruitmentList(pageNumR);
+        })
+    }
+
+    // 아티스트 등록, 수정 신청 승인
+    function approveArtist(ano) {
+        adminService.approveArtist(ano, function (result) {
+            alert(result);
+            showArtistApplyList(pageNumA);
+        })
+    }
+
+    // 아티스트 등록, 수정 신청 반려
+    function rejectArtist(ano) {
+        adminService.rejectArtist(ano, function (result) {
+            alert(result);
+            showArtistApplyList(pageNumA);
+        })
+    }
+
+    // 아티스트 삭제
+    function removeArtist(ano) {
+        adminService.removeArtist(ano, function (result) {
+            alert(result);
+            showArtistList(pageNumA);
+        })
+    }
+
+    $(".user_menu a").on("click", function (e) {
+        $(".user_menu a").removeClass("on");
+        $(e.target).addClass("on");
+    })
+
+    $(".artist_menu a").on("click", function (e) {
+        $(".artist_menu a").removeClass("on");
+        $(e.target).addClass("on");
+    })
+
+</script>
+
+</html>

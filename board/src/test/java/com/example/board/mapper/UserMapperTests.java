@@ -17,14 +17,14 @@ public class UserMapperTests {
 //        log.info(userMapper+"");
 //    }
 
-//    @Test
-//    public void userInsertTest() {
-//        UserVO userVO = new UserVO();
-//        userVO.setUserId("abcd1234");
-//        userVO.setUserPw("1234");
-//        userVO.setUserName("홍길동");
-//        userMapper.insert(userVO);
-//    }
+    @Test
+    public void userInsertTest() {
+        UserVO userVO = new UserVO();
+        userVO.setUserId("abcd1234");
+        userVO.setUserPw("1234");
+        userVO.setUserName("홍길동");
+        userMapper.insert(userVO);
+    }
 
 //    @Test
 //    public void getUser() {

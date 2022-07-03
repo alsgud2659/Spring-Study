@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j  // log를 사용할 수 있게 해줌
 @RequestMapping("/board/*") // /board/ 로 주소가 시작하는 페이지를 인식
 @RequiredArgsConstructor    // final 혹은 @NONNULL이 붙은 필드에 생성자를 추가
-public class BoardController {
+public class                                                                                                                                                                                          BoardController {
     private final BoardService boardService; // 보드 서비스 필드 생성
 
     @GetMapping("/list") // /list로 끝나는 get 요청 인식

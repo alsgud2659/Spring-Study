@@ -50,6 +50,17 @@
                                 <h4>작성자</h4>
                                 <input type="text" readonly th:field="*{boardWriter}"/>
                             </div>
+                            <div class="field">
+                                <h4>첨부파일</h4>
+                            </div>
+                            <div class="field">
+                                <div class="uploadResult">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                            <div class="bigPictureWrapper">
+                                <div class="bigPicture"></div>
+                            </div>
                         </div>
                         <ul class="actions special">
                             <li>
@@ -100,6 +111,103 @@
     let boardBno = [[${board.boardBno}]];
     let paging = [[${criteria.listLink}]];
     const replyUL = $("ul.replies");
+    const $uploadResult = $(".uploadResult ul");
+    // 이미지 원본이 있는 지 검사
+    let check = false;
+    // 애니메이션이 진행중인 지 검사
+    let progress = false;
+    // 이전에 클릭한 이미지 경로 저장
+    let temp = "";
+
+    function showImage(filePath){
+
+        // 만약 temp에 무언가가 들어가 있다면(undefined가 아니라면)
+        if(temp){
+            //현재 클릭한 썸네일의 경로와 이전에 클릭했던 썸네일의 경로를 비교한다.
+            if(filePath == temp){
+                //만약 이전에 눌렀던 썸네일과 동일하다면 애니메이션을 막아준다.
+                //똑같은 거 또 누르지 않게 막아주기
+                return;
+            }
+        }
+
+        // 애니메이션이 진행중일 경우 true
+        if(progress) { return; }
+        // 만약 애니메이션 진행중이 아닐 때에는
+        // 썸네일을 클릭했기 때문에 progress를 true로 변경시켜준다.
+        progress = true;
+
+        //정상적으로 해당 썸네일의 원본이 보이게 된다면,
+        //클릭한 썸네일의 경로를 temp에 담아준다.
+        temp = filePath;
+
+        let time = 0;
+
+        if(check){ //만약 check가 true라면 원본 이미지가 이미 보여지고 있는 상태
+
+            //이미 있는 원본 이미지를 없애준다.
+            $(".bigPicture").animate({width:"0%", height:"0%"}, 1000);
+            setTimeout(function(){
+                $(".bigPictureWrapper").hide();
+                // 애니메이션이 다 끝났을 때
+                progress = false;
+            },950);
+
+            //이미 있는 원본 이미지가 없어지는 데에 걸리는 시간을 time에 담아놓는다.
+            time = 1000;
+        }
+        setTimeout(function(){
+            $(".bigPictureWrapper").css("display", "flex").show();
+            $(".bigPicture").html("<img src='/upload/display?fileName=" + filePath + "'>")
+                .animate({width:"100%", height:"100%"}, 1000);
+            // 이미지 원본이 보이고 있음.
+            check = true;
+
+            setTimeout(function(){
+                // 애니메이션이 다 끝났을 때
+                progress = false;
+            }, 1000);
+
+            //    만약 원본 이미지가 있었다면 time에는 1000이 들어가서 없어지는 동안 기다리게 되고
+            //    원본 이미지가 없었다면 time에는 초기값인 0이 들어가서 클릭한 썸네일의 원본이 바로 보이게 된다.
+        }, time);
+    }
+
+    $(".bigPictureWrapper").on("click", function(){
+        temp = "";
+        // 원본 이미지 클릭 시 사라지는 이벤트 진행중
+        progress = true;
+        $(".bigPicture").animate({width:"0%", height:"0%"}, 1000);
+
+        setTimeout(function(){
+            $(".bigPictureWrapper").hide();
+            //이미지 원본 안보임
+            check = false;
+            //애니메이션이 다 끝났을 때
+            progress = false;
+        },1000);
+    })
+
+    function showUploadResult(files){
+        let str ="";
+        $(files).each(function(i, file){
+            str += "<li data-filename='" + file.fileName.substring(file.fileName.indexOf("_") + 1) + "' data-uuid='" + file.uuid + "' data-uploadpath='" + file.uploadPath + "' data-image='" + file.image + "'>";
+            if(file.image){
+                str += "<a href=\"javascript:showImage(\'" + file.uploadPath + "/" + file.uuid + "_" + file.fileName +"\');\"><img src='/upload/display?fileName=" + file.uploadPath + "/s_" + file.uuid + "_"  + file.fileName + "'></a>";
+            }else{
+                str += "<a href='/upload/download?fileName=" + file.uploadPath + "/" + file.uuid + "_" + file.fileName + "'><img src='/images/attach.png' width='100'></a>";
+            }
+            str += "<p>" + file.fileName.substring(file.fileName.indexOf("_") + 1) + "</p>"
+            str += "</li>"
+        });
+        $uploadResult.html(str);
+    }
+
+    (function () {
+        $.getJSON("/upload/list", {boardBno: boardBno}, function (list) {
+            showUploadResult(list);
+        })
+    })();
 
     showList(pageNum);
 
@@ -158,7 +266,7 @@
     //댓글 삭제
     $(".replies").on("click", "div.btns a.remove", function(e){
         e.preventDefault();
-        if(check) {
+        if(updatecheck) {
             alert("이미 수정중인 댓글이 있습니다.");
             return;
         }
@@ -168,12 +276,12 @@
         });
     });
 
-    let check = false;
+    let updatecheck = false;
 
     //댓글 수정
     $(".replies").on("click", "div.btns a.modify", function(e){
         e.preventDefault();
-        if(check) {
+        if(updatecheck) {
             alert("이미 수정중인 댓글이 있습니다.");
             return;
         }
@@ -190,7 +298,7 @@
         $("p." + replyNumber).replaceWith(str);
         $("textarea." + replyNumber).css("width", "75%");
 
-        check = true;
+        updatecheck = true;
     });
 
     //수정 완료
@@ -200,7 +308,7 @@
         replyService.modify({replyNumber: replyNumber, replyContent: $("textarea." + replyNumber).val()}, function(result){
             alert(result);
             showList(pageNum);
-            check = false;
+            updatecheck = false;
         })
     });
 

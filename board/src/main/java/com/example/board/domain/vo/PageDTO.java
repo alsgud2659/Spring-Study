@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 @Data
 @NoArgsConstructor
@@ -15,6 +17,7 @@ public class PageDTO {
     private int realEnd; // 게시글 페이지의 마지막
     private int pageCount; // 몇페이지를 찍어주는지?
     private boolean prev, next; // 이전과 다음
+
 
     private int total; // 총 게시글 개수
 
